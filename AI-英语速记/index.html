@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI赋能英语速记 - 前缀派生词汇学习系统</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入数据库 -->
+<script src="data.js"></script>
+<!-- 引入JavaScript文件 -->
+<script src="script.js"></script>
+    <style>
+    #word-tree-container {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc; /* 方便看到容器 */
+        background-color: white;
+    }
+</style>
+<body>
+    <!-- 页面路由容器 -->
+    <div class="page-container">
+        <!-- === 第一层：首页（主入口页）=== -->
+        <section id="page-home" class="page active">
+            <!-- 封面图作为背景 -->
+            <div class="cover-background" id="home-background"></div>
+            
+            <header class="page-header">
+                <!-- 首页不需要返回箭头 -->
+                <button class="back-btn" style="visibility: hidden;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="page-title">AI赋能英语速记</h1>
+            </header>
+            
+            <main class="page-content">
+                <!-- 中间核心区：横向卡片式功能入口 -->
+                <div class="function-grid">
+                    <!-- 单词区卡片 -->
+                    <div class="function-card" onclick="showPage('page-word')">
+                        <div class="function-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 class="function-title">单词区</h3>
+                        <p class="function-desc">前缀查词、记忆方法、场景例句</p >
+                        <div class="file-hint">对应文件: word-area</div>
+                    </div>
+                    
+                    <!-- 句子区卡片（占位） -->
+                    <div class="function-card" onclick="showComingSoon('句子区')">
+                        <div class="function-icon">
+                            <i class="fas fa-comment-alt"></i>
+                        </div>
+                        <h3 class="function-title">句子区</h3>
+                        <p class="function-desc">句子分析、结构理解</p >
+                        <div class="file-hint">对应文件: sentence-area (待开发)</div>
+                    </div>
+                    
+                    <!-- 写作区卡片（占位） -->
+                    <div class="function-card" onclick="showComingSoon('写作区')">
+                        <div class="function-icon">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <h3 class="function-title">写作区</h3>
+                        <p class="function-desc">写作辅助、模板学习</p >
+                        <div class="file-hint">对应文件: writing-area (待开发)</div>
+                    </div>
+                </div>
+                
+                <!-- 底部填充区：经典英语故事/例句 -->
+                <div class="bottom-section academic-card">
+                    <h3><i class="fas fa-quote-left"></i> 经典例句赏析</h3>
+                    <div class="example-content">
+                        <p class="english-quote">"The only way to learn a new language is by using it."</p >
+                        <p class="chinese-translation">学习一门新语言的唯一方法就是使用它。</p >
+                        <div class="word-breakdown">
+                            <span class="word-tag">language</span>
+                            <span class="word-tag">learn</span>
+                            <span class="word-tag">method</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- === 第二层：单词区子页 === -->
+        <section id="page-word" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="showPage('page-home')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="page-title">单词速记</h1>
+            </header>
+            
+            <main class="page-content">
+                <!-- 大尺寸图片占位区：前缀树状图大全 -->
+                <div class="image-placeholder academic-card">
+                    <h3><i class="fas fa-project-diagram"></i> 前缀树状图大全</h3>
+                    <div class="image-container">
+                        <!-- 这里插入 prefix-all.png 图片 -->
+                        <img src="static/prefix-all.png" alt="前缀树状图大全" class="feature-image" id="prefix-tree-image" style="width: 80%; height: auto;display: block; margin: 0 auto; border: 1px solid #eee; border-radius: 8px;">
+                        <div class="image-caption">
+                            <p>常见英语前缀及其派生词汇关系图</p >
+                            <p class="file-path">文件路径: static/prefix-all.png</p >
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 中间核心区：细分功能入口 -->
+                <div class="function-grid">
+                    <div class="function-card" onclick="showPage('page-prefix')">
+                        <div class="function-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="function-title">前缀查词</h3>
+                        <p class="function-desc">输入前缀，生成词汇派生树状图</p >
+                    </div>
+                    
+                    <div class="function-card" onclick="showComingSoon('记忆方法')">
+                        <div class="function-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="function-title">记忆方法</h3>
+                        <p class="function-desc">联想记忆、词根词缀分析</p >
+                    </div>
+                    
+                    <div class="function-card" onclick="showComingSoon('场景例句')">
+                        <div class="function-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h3 class="function-title">场景例句</h3>
+                        <p class="function-desc">上下文学习、实际应用</p >
+                    </div>
+                </div>
+                
+                <!-- 底部填充区：经典单词例句/小故事 -->
+                <div class="bottom-section academic-card">
+                    <h3><i class="fas fa-lightbulb"></i> 词根小故事</h3>
+                    <div class="word-story">
+                        <p>前缀 <strong>im-</strong>（不，非）来自拉丁语，常放在以 b, m, p 开头的形容词前，构成反义词。如：</p >
+                        <ul>
+                            <li><strong>im-</strong> + possible（可能的）→ <strong>impossible</strong>（不可能的）</li>
+                            <li><strong>im-</strong> + mature（成熟的）→ <strong>immature</strong>（不成熟的）</li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- === 第三层：前缀查词操作页 === -->
+        <section id="page-prefix" class="page">
+            <header class="page-header">
+                <button class="back-btn" onclick="showPage('page-word')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="page-title">前缀查词</h1>
+            </header>
+            
+            <main class="page-content">
+                <!-- 核心交互区 -->
+                <div class="interactive-area">
+                    <!-- 输入层 -->
+                    <div class="input-layer academic-card">
+                        <h3><i class="fas fa-keyboard"></i> 输入英语前缀</h3>
+                        <p class="instruction">输入如 "im-", "pre-", "un-" 等前缀，系统将生成相关词汇树状图。</p >
+                        
+                        <div class="input-group">
+                            <div class="prefix-input-container">
+                                <input type="text" 
+                                       class="prefix-input" 
+                                       id="prefix-input"
+                                       placeholder="例如：im-, pre-, un-" 
+                                       value="im-">
+                                <div class="input-hint">支持的前缀：un-、dis-、in-、im-、pre-、anti-、auto-、bi-、co-、counter-、de-、en-、ex-、fore-、il-、ir-、inter-、mis-、non-、over-、re-、sub-、trans-、under-
+</div>
+                            </div>
+                            <button id="generate-tree" class="gradient-btn">
+                                <i class="fas fa-project-diagram"></i> 生成树状图
+                            </button>
+                        </div>
+                        
+                        <!-- 视频转场动画占位 -->
+                        <div class="video-placeholder">
+                            <h4><i class="fas fa-video"></i> 转场动画区域</h4>
+                            <div class="video-container" id="transition-video">
+                                <!-- 这里可以插入视频链接或本地视频文件 -->
+                                <div class="video-placeholder-text">
+                                    <i class="fas fa-film fa-3x"></i>
+                                    <p>转场动画视频占位区</p >
+                                    <p class="file-note">可替换为：视频链接 或 static/transition.mp4</p >
+                                    <button class="small-btn" onclick="playDemoAnimation()">播放演示动画</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 展示层：动态生成的单词树状图 -->
+                    <div class="tree-layer academic-card">
+                        <div class="tree-header">
+                            <h3><i class="fas fa-network-wired"></i> 词汇派生树</h3>
+                            <div class="tree-hint">点击任意单词查看详细记忆方法</div>
+                        </div>
+                        <div id="word-tree-container" style="width:100%; height:600px;"></div>
+                            <!-- D3.js树状图将动态生成在这里 -->
+                            <div class="empty-tree-message">
+                                <i class="fas fa-tree fa-3x"></i>
+                                <p>等待生成树状图...</p >
+                                <p>请输入前缀并点击"生成树状图"按钮</p >
+                            </div>
+                        </div>
+                    
+                    
+                    <!-- 记忆层：点击单词后弹出的记忆卡片 -->
+                    <div class="memory-layer">
+                        <div class="memory-card-popup" id="memory-card-popup">
+                            <div class="memory-card academic-card">
+                                <button class="close-btn" onclick="hideMemoryCard()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                
+                                <div class="memory-card-header">
+                                    <h2 class="word" id="popup-word">abundant</h2>
+                                    <div class="word-meta">
+                                        <span class="phonetic" id="popup-phonetic">/əˈbʌndənt/</span>
+                                        <span class="prefix-tag" id="popup-prefix">ab-</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="word-root">
+                                    <h4><i class="fas fa-code-branch"></i> 词根解析</h4>
+                                    <p id="popup-root">词根 ab-（偏离）+ und（流动）+ -ant（形容词后缀）→ 大量流动的 → 丰富的</p >
+                                </div>
+                                
+                                <div class="word-meanings">
+                                    <h4><i class="fas fa-list"></i> 核心释义</h4>
+                                    <ul id="popup-meaning-list">
+                                        <!-- 释义将通过JS动态填充 -->
+                                    </ul>
+                                </div>
+                                
+                                <div class="word-examples">
+                                    <h4><i class="fas fa-comment"></i> 经典例句</h4>
+                                    <div class="example-item" id="popup-example">
+                                        <!-- 例句将通过JS动态填充 -->
+                                    </div>
+                                </div>
+                                
+                                <div class="word-derivatives">
+                                    <h4><i class="fas fa-sitemap"></i> 派生词</h4>
+                                    <div class="derivatives-list" id="popup-derivatives">
+                                        <!-- 派生词将通过JS动态填充 -->
+                                    </div>
+                                </div>
+                                
+                                <div class="memory-tip">
+                                    <h4><i class="fas fa-lightbulb"></i> 记忆方法</h4>
+                                    <p id="popup-mnemonic">联想 "a band (乐队) ant (蚂蚁)" → 一个乐队和大量蚂蚁 → 丰富的</p >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+
+    <!-- 全局提示框 -->
+    <div id="global-toast" class="toast">
+        <div class="toast-content">
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
